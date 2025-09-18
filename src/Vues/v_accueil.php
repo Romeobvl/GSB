@@ -28,8 +28,8 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="card card-primary">
-            <div class="card-header">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
                 <h3 class="card-title">
                     <i class="bi bi-bookmark"></i>
                     Navigation
