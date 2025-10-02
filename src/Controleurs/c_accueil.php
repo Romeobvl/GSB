@@ -15,9 +15,12 @@
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
 
-if ($estConnecte) {
+if ($estConnecte && $_SESSION['role'] == "visiteur") {
     include_once PATH_VIEWS . 'v_entete.php';
 	include PATH_VIEWS . 'v_accueil.php';
+} elseif ($estConnecte && $_SESSION['role'] == "comptable") {
+    include_once PATH_VIEWS . 'v_entete.php';
+	include PATH_VIEWS . 'v_accueil_Comptable.php';
 } else {
     include PATH_VIEWS . 'v_connexion.php';
 }
