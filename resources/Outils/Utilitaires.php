@@ -30,39 +30,22 @@ abstract class Utilitaires
     }
 
     /**
-     * Enregistre dans une variable session les infos d'un visiteur
+     * Enregistre dans une variable session les infos d'un utilisateur
      *
-     * @param String $id ID du visiteur
-     * @param String $nom        Nom du visiteur
-     * @param String $prenom     Prénom du visiteur
+     * @param String $id ID de l'utilisateur
+     * @param String $nom        Nom de l'utilisateur
+     * @param String $prenom     Prénom de l'utilisateur
      *
      * @return null
      */
-    public static function connecterVisiteur($idVisiteur, $nom, $prenom): void
+    public static function connecter($id, $nom, $prenom, $role): void
     {
-        $_SESSION['id'] = $idVisiteur;
+        $_SESSION['id'] = $id;
         $_SESSION['nom'] = $nom;
         $_SESSION['prenom'] = $prenom;
-        $_SESSION['role'] = "visiteur";
+        $_SESSION['role'] = $role;
     }
 
-        /**
-     * Enregistre dans une variable session les infos d'un comptable
-     *
-     * @param String $id ID du comptable
-     * @param String $nom        Nom du comptable
-     * @param String $prenom     Prénom du comptable
-     *
-     * @return null
-     */
-        public static function connecterComptable($idComptable, $nom, $prenom): void
-    {
-        $_SESSION['id'] = $idComptable;
-        $_SESSION['nom'] = $nom;
-        $_SESSION['prenom'] = $prenom;
-        $_SESSION['role'] = "comptable";
-    }
-    
     /**
      * Détruit la session active
      *
