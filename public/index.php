@@ -29,8 +29,9 @@ if (!$estConnecte) {
     require PATH_VIEWS . 'v_entete.php';
 } elseif ($_SESSION['role'] === 'comptable') {
     require PATH_VIEWS . 'v_entete_Comptable.php';
+}elseif ($_SESSION['role'] === 'visiteur') {
+    require PATH_VIEWS . 'v_entete.php';
 }
-
 
 $uc = filter_input(INPUT_GET, 'uc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -52,6 +53,12 @@ switch ($uc) {
         break;
     case 'etatFrais':
         include PATH_CTRLS . 'c_etatFrais.php';
+        break;
+    case 'validerFrais':
+        include PATH_CTRLS . 'c_validerFrais.php';
+        break;
+    case 'suivrePaiementFrais':
+        include PATH_CTRLS . 'c_suivrePaiementFrais.php';
         break;
     case 'deconnexion':
         include PATH_CTRLS . 'c_deconnexion.php';

@@ -34,6 +34,7 @@
         <div class="container">
             <?php
             $uc = filter_input(INPUT_GET, 'uc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            
             if ($estConnecte) {
                 ?>
             <div class="header">

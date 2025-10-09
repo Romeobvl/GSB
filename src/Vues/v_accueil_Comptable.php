@@ -34,14 +34,14 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-12 d-grid gap-2 d-md-block">
-                        <a href="index.php?uc=gererFrais&action=saisirFrais"
+                        <a href="index.php?uc=validerFrais&action=saisirFrais"
                            class="btn btn-success btn-lg" role="button">
-                            <i class="bi bi-pencil"></i>
-                            <br>Renseigner la fiche de frais</a>
-                        <a href="index.php?uc=etatFrais&action=selectionnerMois"
+                            <i class="bi bi-check"></i>
+                            <br>Valider les fiche de frais</a>
+                        <a href="index.php?uc=suivrePaiementFrais&action=selectionnerMois"
                            class="btn btn-warning btn-lg text-white" role="button">
-                            <i class="bi bi-list-ul"></i>
-                            <br>Afficher mes fiches de frais</a>
+                            <i class="bi bi-currency-euro"></i>
+                            <br>Suivre le paiement des fiches de frais</a>
                     </div>
                 </div>
             </div>
