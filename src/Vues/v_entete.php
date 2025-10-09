@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Vue Entête
  *
@@ -15,7 +14,6 @@
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  * @link      https://getbootstrap.com/docs/5.3/ Documentation Bootstrap v5
  */
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -34,49 +32,71 @@
         <div class="container">
             <?php
             $uc = filter_input(INPUT_GET, 'uc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            
+
             if ($estConnecte) {
+
+                if ($_SESSION['role'] === 'visiteur') {
+                    $txt1 = 'Renseigner la fiche de frais';
+                    $txt2 = 'Afficher mes fiches de frais';
+                    $icon1 = 'bi bi-pencil';
+                    $icon2 = 'bi bi-list-check';
+                    $active = 'active';
+                    $text = '';
+                    $lien1 = 'gererFrais';
+                    $lien2 = 'etatFrais';
+                    $act1 =
+                    $act2 =
+                } elseif ($_SESSION['role'] === 'comptable') {
+                    $txt1 = 'Valider les fiche de frais';
+                    $txt2 = 'Suivre le paiement des fiches de frais';
+                    $icon1 = 'bi bi-check';
+                    $icon2 = 'bi bi-currency-euro';
+                    $active = 'active bg-warning text-white';
+                    $text = 'text-warning';
+                    $lien1 = 'validerFrais';
+                    $lien2 = 'suivrePaiementFrais';
+                }
                 ?>
-            <div class="header">
-                <div class="row align-items-center">
-                    <div class="col-md-4">
-                        <h1>
-                            <img src="./images/logo.jpg" class="img-fluid" 
-                                 alt="Laboratoire Galaxy-Swiss Bourdin" 
-                                 title="Laboratoire Galaxy-Swiss Bourdin">
-                        </h1>
-                    </div>
-                    <div class="col-md-8">
-                        <ul class="nav nav-pills justify-content-end" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link <?php if (!$uc || $uc == 'accueil') { ?>active<?php } ?> " href="index.php">
-                                    <span class="bi bi-house"></span>
-                                    Accueil
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link <?php if ($uc == 'gererFrais') { ?>active<?php } ?>" href="index.php?uc=gererFrais&action=saisirFrais">
-                                    <span class="bi bi-pencil"></span>
-                                    Renseigner la fiche de frais
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link <?php if ($uc == 'etatFrais') { ?>active<?php } ?>" href="index.php?uc=etatFrais&action=selectionnerMois">
-                                    <span class="bi bi-list-check"></span>
-                                    Afficher mes fiches de frais
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link <?php if ($uc == 'deconnexion') { ?>active<?php } ?>" href="index.php?uc=deconnexion&action=demandeDeconnexion">
-                                    <span class="bi bi-box-arrow-right"></span>
-                                    Déconnexion
-                                </a>
-                            </li>
-                        </ul>
+                <div class="header">
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <h1>
+                                <img src="./images/logo.jpg" class="img-fluid" 
+                                     alt="Laboratoire Galaxy-Swiss Bourdin" 
+                                     title="Laboratoire Galaxy-Swiss Bourdin">
+                            </h1>
+                        </div>
+                        <div class="col-md-8">
+                            <ul class="nav nav-pills justify-content-end" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link <?php if (!$uc || $uc == 'accueil') { ?><?php echo $active ?><?php } ?> <?php echo $text ?> " href="index.php">
+                                        <span class="bi bi-house"></span>
+                                        Accueil
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link <?php if ($uc == 'gererFrais') { ?><?php echo $active ?><?php } ?> <?php echo $text ?> " href="index.php?uc=<?php echo $lien1 ?>&action=<?php echo $act1 ?>saisirFrais">
+                                        <span class="<?php echo $icon1 ?>"></span>
+                                        <?php echo $txt1 ?> 
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link <?php if ($uc == 'etatFrais') { ?><?php echo $active ?><?php } ?> <?php echo $text ?> " href="index.php?uc=<?php echo $lien2 ?>&action=selectionnerMois">
+                                        <span class="<?php echo $icon2 ?>"></span>
+                                        <?php echo $txt2 ?> 
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link <?php if ($uc == 'deconnexion') { ?><?php echo $active ?><?php } ?> <?php echo $text ?> " href="index.php?uc=deconnexion&action=demandeDeconnexion">
+                                        <span class="bi bi-box-arrow-right"></span>
+                                        Déconnexion
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <?php
+                <?php
             } else {
                 ?>   
                 <h1>

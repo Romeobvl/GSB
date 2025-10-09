@@ -25,13 +25,7 @@ session_start();
 $pdo = PdoGsb::getPdoGsb();
 $estConnecte = Utilitaires::estConnecte();
 
-if (!$estConnecte) {
-    require PATH_VIEWS . 'v_entete.php';
-} elseif ($_SESSION['role'] === 'comptable') {
-    require PATH_VIEWS . 'v_entete_Comptable.php';
-}elseif ($_SESSION['role'] === 'visiteur') {
-    require PATH_VIEWS . 'v_entete.php';
-}
+require PATH_VIEWS . 'v_entete.php';
 
 $uc = filter_input(INPUT_GET, 'uc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
