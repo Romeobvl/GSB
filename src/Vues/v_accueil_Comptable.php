@@ -39,7 +39,7 @@
                             <i class="bi bi-pencil"></i>
                             <br>Renseigner la fiche de frais</a>
                         <a href="index.php?uc=etatFrais&action=selectionnerMois"
-                           class="btn btn-warning btn-lg" role="button">
+                           class="btn btn-warning btn-lg text-white" role="button">
                             <i class="bi bi-list-ul"></i>
                             <br>Afficher mes fiches de frais</a>
                     </div>
