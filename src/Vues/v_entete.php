@@ -42,10 +42,10 @@
                     $icon2 = 'bi bi-list-check';
                     $active = 'active';
                     $text = '';
-                    $lien1 = 'gererFrais';
-                    $lien2 = 'etatFrais';
-                    $act1 =
-                    $act2 =
+                    $uc1 = 'gererFrais';
+                    $uc2 = 'etatFrais';
+                    $act1 = 'saisirFrais';
+                    $act2 = 'selectionneMois';
                 } elseif ($_SESSION['role'] === 'comptable') {
                     $txt1 = 'Valider les fiche de frais';
                     $txt2 = 'Suivre le paiement des fiches de frais';
@@ -53,8 +53,10 @@
                     $icon2 = 'bi bi-currency-euro';
                     $active = 'active bg-warning text-white';
                     $text = 'text-warning';
-                    $lien1 = 'validerFrais';
-                    $lien2 = 'suivrePaiementFrais';
+                    $uc1 = 'validerFrais';
+                    $uc2 = 'suivrePaiementFrais';
+                    $act1 = 'validerFrais';
+                    $act2 = 'suivrrePaiementFrais';
                 }
                 ?>
                 <div class="header">
@@ -75,13 +77,13 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link <?php if ($uc == 'gererFrais') { ?><?php echo $active ?><?php } ?> <?php echo $text ?> " href="index.php?uc=<?php echo $lien1 ?>&action=<?php echo $act1 ?>saisirFrais">
+                                    <a class="nav-link <?php if ($uc == $uc1) { ?><?php echo $active ?><?php } ?> <?php echo $text ?> " href="index.php?uc=<?php echo $uc1 ?>&action=<?php echo $act1 ?>">
                                         <span class="<?php echo $icon1 ?>"></span>
                                         <?php echo $txt1 ?> 
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link <?php if ($uc == 'etatFrais') { ?><?php echo $active ?><?php } ?> <?php echo $text ?> " href="index.php?uc=<?php echo $lien2 ?>&action=selectionnerMois">
+                                    <a class="nav-link <?php if ($uc == $uc2) { ?><?php echo $active ?><?php } ?> <?php echo $text ?> " href="index.php?uc=<?php echo $uc2 ?>&action=<?php echo $act2 ?>">
                                         <span class="<?php echo $icon2 ?>"></span>
                                         <?php echo $txt2 ?> 
                                     </a>
