@@ -45,7 +45,7 @@
                     $uc1 = 'gererFrais';
                     $uc2 = 'etatFrais';
                     $act1 = 'saisirFrais';
-                    $act2 = 'selectionneMois';
+                    $act2 = 'selectionnerMois';
                 } elseif ($_SESSION['role'] === 'comptable') {
                     $txt1 = 'Valider les fiche de frais';
                     $txt2 = 'Suivre le paiement des fiches de frais';

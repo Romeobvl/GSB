@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Vue État de Frais
  *
@@ -15,66 +14,46 @@
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  * @link      https://getbootstrap.com/docs/5.3/ Documentation Bootstrap v5
  */
-
 ?>
-<hr>
-<div class="card card-primary">
-    <div class="card-header">Fiche de frais du mois 
-        <?php echo $numMois . '-' . $numAnnee ?> : </div>
-    <div class="card-body">
-        <strong><u>Etat :</u></strong> <?php echo $libEtat ?>
-        depuis le <?php echo $dateModif ?> <br> 
-        <strong><u>Montant validé :</u></strong> <?php echo $montantValide ?>
-    </div>
-</div>
-<div class="card card-info">
-    <div class="card-header">Eléments forfaitisés</div>
-    <div class="card-body">
-        <table class="table table-bordered table-responsive">
-            <tr>
-                <?php
-                foreach ($lesFraisForfait as $unFraisForfait) {
-                    $libelle = $unFraisForfait['libelle']; ?>
-                    <th> <?php echo htmlspecialchars($libelle) ?></th>
-                    <?php
-                }
+<div id ="validerFrais">
+    Choisir le visiteur: 
+
+    <label for="lstMois" class="form-label" accesskey="n">Mois : </label>
+    <select id="lstMois" name="lstMois" class="form-select">
+        <?php
+        foreach ($lesMois as $unMois) {
+            $mois = $unMois['mois'];
+            $numAnnee = $unMois['numAnnee'];
+            $numMois = $unMois['numMois'];
+            if ($mois == $moisASelectionner) {
                 ?>
-            </tr>
-            <tr>
+                <option selected value="<?php echo $mois ?>">
+                    <?php echo $numMois . '/' . $numAnnee ?> </option>
                 <?php
-                foreach ($lesFraisForfait as $unFraisForfait) {
-                    $quantite = $unFraisForfait['quantite']; ?>
-                    <td class="qteForfait"><?php echo $quantite ?> </td>
-                    <?php
-                }
+            } else {
                 ?>
-            </tr>
-        </table>
-    </div>
-</div>
-<div class="card card-info">
-    <div class="card-header">Descriptif des éléments hors forfait - 
-        <?php echo $nbJustificatifs ?> justificatifs reçus</div>
-    <div class="card-body">
-        <table class="table table-bordered table-responsive">
-            <tr>
-                <th class="date">Date</th>
-                <th class="libelle">Libellé</th>
-                <th class='montant'>Montant</th>                
-            </tr>
-            <?php
-            foreach ($lesFraisHorsForfait as $unFraisHorsForfait) {
-                $date = $unFraisHorsForfait['date'];
-                $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
-                $montant = $unFraisHorsForfait['montant']; ?>
-                <tr>
-                    <td><?php echo $date ?></td>
-                    <td><?php echo $libelle ?></td>
-                    <td><?php echo $montant ?></td>
-                </tr>
+                <option value="<?php echo $mois ?>">
+                    <?php echo $numMois . '/' . $numAnnee ?> </option>
                 <?php
             }
-            ?>
-        </table>
+        }
+        ?>    
+
+    </select>
+    <h2 class ="text-warning">
+        Valider la fiche de frais
+    </h2>
+    <div>Eléments forfaitisés</div>
+    <div>
+        <ul class="list-group">
+            <li class = "list-group-item">Forfait Étape:</li>
+            <li class = "list-group-item">Frais Kilomètrique</li>
+            <li class = "list-group-item">Nuitée Hôtel</li>
+            <li class = "list-group-item">Repas Restaurant</li>
+        </ul>
     </div>
+    <input id="ok" type="submit" value="Valider" class="btn btn-success" 
+           role="button">
+    <input id="annuler" type="reset" value="Effacer" class="btn btn-danger" 
+           role="button">
 </div>
