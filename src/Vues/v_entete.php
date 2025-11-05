@@ -55,7 +55,7 @@
                     $text = 'text-warning';
                     $uc1 = 'validerFrais';
                     $uc2 = 'suivrePaiementFrais';
-                    $act1 = 'validerFrais';
+                    $act1 = 'selectionnerVisiteur';
                     $act2 = 'suivrrePaiementFrais';
                 }
                 ?>

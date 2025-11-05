@@ -82,6 +82,34 @@ class PdoGsb
         return self::$instance;
     }
 
+    
+    
+        public function getDataVisiteur($idVisiteur): array
+    {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+            . 'visiteur.prenom AS prenom '
+            . 'FROM visiteur '
+            . 'WHERE id = :idVisiteur'
+        );
+        $requetePrepare->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        $visiteur = $requetePrepare->fetch(); 
+            $idVisiteur = $visiteur['id'];
+            $nomVisiteur = $visiteur['nom'];
+            $prenomVisiteur = $visiteur['prenom'];
+            $leVisiteur = array (
+                'id' => $idVisiteur,
+                'nom' => $nomVisiteur,
+                'prenom' => $prenomVisiteur
+               );
+        
+        return $leVisiteur;
+    }
+    
+    
+    
+    
     /**
      * Retourne les informations d'un visiteur
      *
@@ -221,6 +249,28 @@ class PdoGsb
         );
         $requetePrepare->execute();
         return $requetePrepare->fetchAll();
+    }
+    
+    
+        public function getLesVisiteurs(): array
+    {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT visiteur.id AS id, visiteur.nom AS nom, visiteur.prenom AS prenom '
+            . 'FROM visiteur'
+        );
+        $requetePrepare->execute();
+        $lesVisiteurs = array ();
+        while ($visiteur = $requetePrepare->fetch()) {
+            $idVisiteur = $visiteur['id'];
+            $nomVisiteur = $visiteur['nom'];
+            $prenomVisiteur = $visiteur['prenom'];
+            $lesVisiteurs[] = array (
+                'id' => $idVisiteur,
+                'nom' => $nomVisiteur,
+                'prenom' => $prenomVisiteur
+               );
+        }
+        return $lesVisiteurs;
     }
 
     /**

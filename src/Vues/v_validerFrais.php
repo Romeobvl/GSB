@@ -15,9 +15,32 @@
  * @link      https://getbootstrap.com/docs/5.3/ Documentation Bootstrap v5
  */
 ?>
-<div id ="validerFrais">
-    Choisir le visiteur: 
+<div>
+    <form method="POST" action="index.php?uc=validerFrais&action=selectionnerVisiteur">
+        <label for="visiteur" class="form-label" accesskey="n">Choisir le visiteur:</label>
+        <select id="visiteur" name="visiteur" class="form-select">
+        <?php
+        foreach ($LesVisiteurs as $unVisiteur) {
+            $visiteur = $unVisiteur;
+            if ($visiteur == $VisiteurASelectionner) {
+                ?>
+                <option selected value="<?php echo $visiteur['id'] ?>">
+                    <?php echo $visiteur['nom'] . " " . $visiteur['prenom'] ?>
+                </option>
+                <?php
+            } else {
+                ?>
+                 <option value="<?php echo $visiteur['id'] ?>">
+                    <?php echo $visiteur['nom'] . " " . $visiteur['prenom'] ?>
+                </option>
+                <?php
+            }        
+        }
+        ?>
+        </select>
+    </form>
 
+    <form
     <label for="lstMois" class="form-label" accesskey="n">Mois : </label>
     <select id="lstMois" name="lstMois" class="form-select">
         <?php
@@ -37,9 +60,10 @@
                 <?php
             }
         }
-        ?>    
-
+        ?>   
     </select>
+    </form>
+</div>
     <h2 class ="text-warning">
         Valider la fiche de frais
     </h2>
