@@ -1,4 +1,4 @@
-X<?php
+<?php
 
 /**
  * Gestion de l'affichage des frais

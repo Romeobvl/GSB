@@ -17,7 +17,7 @@
 ?>
 <div class="row">
     <div class="col-md-4">
-        <form action="index.php?uc=validerFrais&action=selectionnerMois" 
+        <form action="index.php?uc=validerFrais&action=voirEtatFrais" 
               method="post" role="form">
             <div class="mb-3">
                 <label for="lstMois" class="form-label" accesskey="n">Mois :</label>
