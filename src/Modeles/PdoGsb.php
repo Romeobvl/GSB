@@ -65,7 +65,7 @@ class PdoGsb {
         $this->connexion = null;
     }
 
-    /**
+    /**.0
      * Fonction statique qui crée l'unique instance de la classe
      * Appel : $instancePdoGsb = PdoGsb::getPdoGsb();
      *

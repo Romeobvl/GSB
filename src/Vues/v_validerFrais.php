@@ -15,69 +15,106 @@
  * @link      https://getbootstrap.com/docs/5.3/ Documentation Bootstrap v5
  */
 ?>
-<div>
-    <form method="POST" action="index.php?uc=validerFrais&action=selectionnerVisiteur">
-        <label for="visiteur" class="form-label" accesskey="n">Choisir le visiteur:</label>
-        <select id="visiteur" name="visiteur" class="form-select">
-        <?php
-        foreach ($LesVisiteurs as $unVisiteur) {
-            $visiteur = $unVisiteur;
-            if ($visiteur == $VisiteurASelectionner) {
-                ?>
-                <option selected value="<?php echo $visiteur['id'] ?>">
-                    <?php echo $visiteur['nom'] . " " . $visiteur['prenom'] ?>
-                </option>
-                <?php
-            } else {
-                ?>
-                 <option value="<?php echo $visiteur['id'] ?>">
-                    <?php echo $visiteur['nom'] . " " . $visiteur['prenom'] ?>
-                </option>
-                <?php
-            }        
-        }
-        ?>
-        </select>
-    </form>
+<hr>
+<div class="card card-info">
+    <div class="card-header bg-warning text-white">Eléments forfaitisés</div>
+    <div class="card-body">
+        <form method="post" action="index.php?uc=validerFrais&action=validerFrais" onsubmit="return confirm('Voulez-vous valider les changements ?');">
 
-    <form
-    <label for="lstMois" class="form-label" accesskey="n">Mois : </label>
-    <select id="lstMois" name="lstMois" class="form-select">
-        <?php
-        foreach ($lesMois as $unMois) {
-            $mois = $unMois['mois'];
-            $numAnnee = $unMois['numAnnee'];
-            $numMois = $unMois['numMois'];
-            if ($mois == $moisASelectionner) {
-                ?>
-                <option selected value="<?php echo $mois ?>">
-                    <?php echo $numMois . '/' . $numAnnee ?> </option>
-                <?php
-            } else {
-                ?>
-                <option value="<?php echo $mois ?>">
-                    <?php echo $numMois . '/' . $numAnnee ?> </option>
-                <?php
-            }
-        }
-        ?>   
-    </select>
-    </form>
-</div>
-    <h2 class ="text-warning">
-        Valider la fiche de frais
-    </h2>
-    <div>Eléments forfaitisés</div>
-    <div>
-        <ul class="list-group">
-            <li class = "list-group-item">Forfait Étape:</li>
-            <li class = "list-group-item">Frais Kilomètrique</li>
-            <li class = "list-group-item">Nuitée Hôtel</li>
-            <li class = "list-group-item">Repas Restaurant</li>
-        </ul>
+            <input type="hidden" name="visiteur" value="<?php echo $idVisiteur ?>">
+            <input type="hidden" name="mois" value="<?php echo $leMois ?>">
+
+            <table class="table table-bordered table-responsive">
+                <tr>
+                    <?php
+                    foreach ($lesFraisForfait as $unFraisForfait) {
+                        $libelle = $unFraisForfait['libelle'];
+                        ?>
+                        <th> <?php echo htmlspecialchars($libelle) ?></th>
+                        <?php
+                    }
+                    ?>
+                </tr>
+                <tr>
+
+                    <?php
+                    foreach ($lesFraisForfait as $unFraisForfait) {
+                        $idFrais = $unFraisForfait['idfrais'];
+                        $quantite = $unFraisForfait['quantite'];
+                        ?>
+                        <td class="qteForfait">
+                            <input type="text" id="idFrais"
+                                   name="lesFrais[<?php echo $idFrais ?>]"
+                                   value="<?php echo $quantite ?>"
+                                   class="form-control">
+                        </td>
+
+                        <?php
+                    }
+                    ?>
+
+                </tr>
+            </table>
+
+            <button class="btn btn-success" type="submit">Corriger</button>
+            <button class="btn btn-danger" type="reset">Réinitialiser</button>
+        </form>
     </div>
-    <input id="ok" type="submit" value="Valider" class="btn btn-success" 
-           role="button">
-    <input id="annuler" type="reset" value="Effacer" class="btn btn-danger" 
-           role="button">
+</div>
+
+<br>
+
+<div class="card card-info">
+    <div class="card-header bg-warning text-white">Descriptif des éléments hors forfait</div>
+    <div class="card-body">
+        <form method="post" action="index.php?uc=validerFrais&action=validerFrais" onsubmit="return confirm('Voulez-vous valider les changements ?');">
+            <table class="table table-bordered table-responsive">
+                <tr>
+                    <th class="date">Date</th>
+                    <th class="libelle">Libellé</th>
+                    <th class='montant'>Montant</th>                
+                </tr>
+                <?php
+                foreach ($lesFraisHorsForfait as $unFraisHorsForfait) {
+
+                    $idFraisHorsForfait = $unFraisHorsForfait['id'];
+                    $date = $unFraisHorsForfait['date'];
+                    $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
+                    $montant = $unFraisHorsForfait['montant'];
+                    ?>
+                    <tr>
+                        <td class="qteForfait">
+                            <input type="text" id="idFrais"
+                                   name="lesFrais[<?php echo $idFraisHorsForfait ?>]"
+                                   value="<?php echo $date ?>"
+                                   class="form-control">
+                        </td>
+                        <td class="qteForfait">
+                            <input type="text" id="idFrais"
+                                   name="lesFrais[<?php echo $idFraisHorsForfait ?>]"
+                                   value="<?php echo $libelle ?>"
+                                   class="form-control">
+                        </td>
+                        <td class="qteForfait">
+                            <input type="text" id="idFrais"
+                                   name="lesFrais[<?php echo $idFraisHorsForfait ?>]"
+                                   value="<?php echo $montant ?>"
+                                   class="form-control">
+                        </td>
+                        <td>            
+                            <button class="btn btn-success" type="submit">Corriger</button>
+                            <button class="btn btn-danger" type="reset">Réinitialiser</button>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
+        </form>
+         <form method="post" action="index.php?uc=validerFrais&action=validerFrais" onsubmit="return confirm('Voulez-vous valider les changements ?');">
+            Nombre de justificatif: <input id="number" type="number" value="<?php echo $nbJustificatifs ?>" />
+            <button class="btn btn-success" type="submit">Corriger</button>
+            <button class="btn btn-danger" type="reset">Réinitialiser</button>
+        </form>
+    </div>
 </div>

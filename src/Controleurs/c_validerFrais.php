@@ -19,25 +19,31 @@ use Outils\Utilitaires;
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $lesVisiteurs = $pdo->getLesVisiteurs();
 
-$leVisiteur = filter_input(INPUT_POST, 'visiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-if (isset($leVisiteur)) {
-    $visiteurASelectionner = $pdo->getInfosVisiteurById($leVisiteur);
+$idVisiteur = filter_input(INPUT_POST, 'visiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$leMois = filter_input(INPUT_POST, 'mois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+if (isset($idVisiteur)) {
+    $visiteurASelectionner = $pdo->getInfosVisiteurById($idVisiteur);
+    $moisASelectionner = $leMois;
+    $lesMois = $pdo->getLesMoisDisponibles($idVisiteur);
 }
-$id = $leVisiteur;
+
+
+$unFrais = filter_input(INPUT_POST, 'mois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+
+
 
 switch ($action) {
     case 'selectionner' :
-        $lesMois = $pdo->getLesMoisDisponibles($leVisiteur);
         include PATH_VIEWS . 'v_listeVisiteurs.php';
         include PATH_VIEWS . 'v_listeMoisValider.php';
         break;
 
-    case 'voirEtatFrais':
-        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($id, $leMois);
-        $lesFraisForfait = $pdo->getLesFraisForfait($id, $leMois);
-        $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($id, $leMois);
-        $numAnnee = substr($leMois, 0, 4);
-        $numMois = substr($leMois, 4, 2);
+    case 'validerFrais':
+        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $leMois);
+        $lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $leMois);
+        $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($idVisiteur, $leMois);
         $libEtat = $lesInfosFicheFrais['libEtat'];
         $montantValide = $lesInfosFicheFrais['montantValide'];
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
@@ -45,5 +51,5 @@ switch ($action) {
 
         include PATH_VIEWS . 'v_listeVisiteurs.php';
         include PATH_VIEWS . 'v_listeMoisValider.php';
-        include PATH_VIEWS . 'v_etatFrais.php';
+        include PATH_VIEWS . 'v_validerFrais.php';
 }
