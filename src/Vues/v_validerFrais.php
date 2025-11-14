@@ -121,11 +121,11 @@
 
 <br>
 
-<form method="post" action="index.php?uc=validerFrais&action=validerFrais" onsubmit="return confirm('Voulez-vous valider les changements ?');">
+<form method="post" action="index.php?uc=validerFrais&action=validationFinale" onsubmit="return confirm('Voulez-vous valider les changements ?');">
     <input type="hidden" name="visiteur" value="<?php echo $idVisiteur ?>">
     <input type="hidden" name="mois" value="<?php echo $leMois ?>"> 
 
     Nombre de justificatif: <input id="number" type="number" value="<?php echo $nbJustificatifs ?>" size="1" min="0" max="15" />
-    <button class="btn btn-success" type="submit">Corriger</button>
+    <button class="btn btn-success" type="submit">Valider</button>
     <button class="btn btn-danger" type="reset">Réinitialiser</button>
 </form>
