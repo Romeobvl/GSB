@@ -68,9 +68,6 @@
     <div class="card-header bg-warning text-white">Descriptif des éléments hors forfait</div>
     <div class="card-body">
 
-
-        <input type="hidden" name="visiteur" value="<?php echo $idVisiteur ?>">
-        <input type="hidden" name="mois" value="<?php echo $leMois ?>">
         <table class="table table-bordered table-responsive">
             <tr>
                 <th class="date">Date</th>
@@ -85,29 +82,35 @@
                 $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
                 $montant = $unFraisHorsForfait['montant'];
                 ?>
-                <form method="post" action="index.php?uc=validerFrais&action=majFraisForfait" onsubmit="return confirm('Voulez-vous valider les changements ?');">
+                <form method="post" action="index.php?uc=validerFrais&action=majFraisHorsForfait" onsubmit="return confirm('Voulez-vous valider les changements ?');">
+
+                    <input type="hidden" name="visiteur" value="<?php echo $idVisiteur ?>">
+                    <input type="hidden" name="mois" value="<?php echo $leMois ?>">
+                    <input type="hidden" name="idFraisHors" value="<?php echo $idFraisHorsForfait ?>">
+
                     <tr>
                         <td class="qteForfait">
                             <input type="text" id="idFrais"
-                                   name="lesFraisHors[<?php echo $idFraisHorsForfait ?>]"
+                                   name="lesFraisHorsD"
                                    value="<?php echo $date ?>"
                                    class="form-control">
                         </td>
                         <td class="qteForfait">
                             <input type="text" id="idFrais"
-                                   name="lesFraisHors[<?php echo $idFraisHorsForfait ?>]"
+                                   name="lesFraisHorsL"
                                    value="<?php echo $libelle ?>"
                                    class="form-control">
                         </td>
                         <td class="qteForfait">
                             <input type="text" id="idFrais"
-                                   name="lesFraisHors[<?php echo $idFraisHorsForfait ?>]"
+                                   name="lesFraisHorsM"
                                    value="<?php echo $montant ?>"
                                    class="form-control">
                         </td>
                         <td>            
-                            <button class="btn btn-success" type="submit">Corriger</button>
+                            <button class="btn btn-success" type="submit" name="submitType" value="Corriger">Corriger</button>
                             <button class="btn btn-danger" type="reset">Réinitialiser</button>
+                            <button class="btn btn-dark" type="submit" name="submitType" value="Refuser">Refuser</button>
                         </td>
                     </tr>
 
@@ -124,8 +127,7 @@
 <form method="post" action="index.php?uc=validerFrais&action=validationFinale" onsubmit="return confirm('Voulez-vous valider les changements ?');">
     <input type="hidden" name="visiteur" value="<?php echo $idVisiteur ?>">
     <input type="hidden" name="mois" value="<?php echo $leMois ?>"> 
-
-    Nombre de justificatif: <input id="number" type="number" value="<?php echo $nbJustificatifs ?>" size="1" min="0" max="15" />
-    <button class="btn btn-success" type="submit">Valider</button>
-    <button class="btn btn-danger" type="reset">Réinitialiser</button>
+    Nombre de justificatif: 
+    <input type="number" id="number" name="number" value="<?php echo $nbJustificatifs ?>" size="1" min="0" max="15" />
+    <button class="btn btn-success" type="submit">Valider la fiche</button>
 </form>
