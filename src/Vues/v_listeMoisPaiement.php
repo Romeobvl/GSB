@@ -1,6 +1,6 @@
 <?php
 /**
- * Vue Liste des mois
+ * Vue Liste des mois à Suivre les Paiements
  *
  * PHP Version 8
  *

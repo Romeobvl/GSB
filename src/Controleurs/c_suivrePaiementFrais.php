@@ -14,35 +14,37 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-
 use Outils\Utilitaires;
 
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 $lesVisiteurs = $pdo->getLesVisiteurs();
-
 $idVisiteur = filter_input(INPUT_POST, 'visiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$leMois = filter_input(INPUT_POST, 'mois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+if (isset($idVisiteur)) {
+    $visiteurASelectionner = $pdo->getInfosVisiteurById($idVisiteur);
+    $moisASelectionner = $leMois;
+    $lesMois = $pdo->getLesMoisDisponiblesAPayer($idVisiteur);
+}
 
 switch ($action) {
     case 'selectionner':
-      
-        $lesMois = $pdo->getLesMoisDisponiblesAPayer($idVisiteur);
-         include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';   
+        include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';
         include PATH_VIEWS . 'v_listeMoisPaiement.php';
         break;
+    
     case 'voirEtatFrais':
-        $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $lesMois = $pdo->getLesMoisDisponibles($id);
-        $moisASelectionner = $leMois;
-        include PATH_VIEWS . 'v_listeMois.php';
-        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($id, $leMois);
-        $lesFraisForfait = $pdo->getLesFraisForfait($id, $leMois);
-        $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($id, $leMois);
-        $numAnnee = substr($leMois, 0, 4);
-        $numMois = substr($leMois, 4, 2);
+        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $leMois);
+        $lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $leMois);
+        $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($idVisiteur, $leMois);
         $libEtat = $lesInfosFicheFrais['libEtat'];
         $montantValide = $lesInfosFicheFrais['montantValide'];
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
         $dateModif = Utilitaires::dateAnglaisVersFrancais($lesInfosFicheFrais['dateModif']);
+        
+        include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';
+        include PATH_VIEWS . 'v_listeMoisPaiement.php';
         include PATH_VIEWS . 'v_etatFrais.php';
+        break;
 }
