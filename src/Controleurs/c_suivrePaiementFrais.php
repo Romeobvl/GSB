@@ -18,16 +18,17 @@
 use Outils\Utilitaires;
 
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$id = $_SESSION['id'];
+
+$lesVisiteurs = $pdo->getLesVisiteurs();
+
+$idVisiteur = filter_input(INPUT_POST, 'visiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
 switch ($action) {
-    case 'selectionnerMois':
-        $lesMois = $pdo->getLesMoisDisponibles($id);
-        // Afin de sélectionner par défaut le dernier mois dans la zone de liste
-        // on demande toutes les clés, et on prend la première,
-        // les mois étant triés décroissants
-        $lesCles = array_keys($lesMois);
-        $moisASelectionner = $lesCles[0];
-        include PATH_VIEWS . 'v_listeMois.php';
+    case 'selectionner':
+      
+        $lesMois = $pdo->getLesMoisDisponiblesAPayer($idVisiteur);
+         include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';   
+        include PATH_VIEWS . 'v_listeMoisPaiement.php';
         break;
     case 'voirEtatFrais':
         $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);

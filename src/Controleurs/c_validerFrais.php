@@ -72,7 +72,7 @@ switch ($action) {
         break;
 
     case 'majFraisHorsForfait':
-        $submitType = filter_input(INPUT_GET, 'submitType', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $submitType = filter_input(INPUT_POST, 'submitType', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         switch ($submitType) {
             case 'Corriger':
                 $idFraisHors = filter_input(INPUT_POST, 'idFraisHors', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -92,7 +92,9 @@ switch ($action) {
                 include PATH_VIEWS . 'v_validerFrais.php';
                 break;
             case 'Refuser':
-                $pdo->refuserFraisHorsForfait($idFraisHors);
+                $idFraisHors = filter_input(INPUT_POST, 'idFraisHors', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $libelleRefuse = filter_input(INPUT_POST, 'lesFraisHorsL', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $pdo->refuserFraisHorsForfait($idFraisHors, $libelleRefuse);
                 
                 $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $leMois);
                 include PATH_VIEWS . 'v_listeVisiteurs.php';
@@ -106,7 +108,8 @@ switch ($action) {
     case 'validationFinale':
         $number = filter_input(INPUT_POST, 'number', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $etat = "VA";
-        $pdo->majEtatFicheFrais($idVisiteur, $leMois, $etat, $number);
+        $pdo->majNbJustificatifs($idVisiteur, $leMois, $number);
+        $pdo->majEtatFicheFrais($idVisiteur, $leMois, $etat);
 
         $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($idVisiteur, $leMois);
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];

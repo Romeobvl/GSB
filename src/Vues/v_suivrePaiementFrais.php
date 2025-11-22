@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 /**
  * Vue État de Frais

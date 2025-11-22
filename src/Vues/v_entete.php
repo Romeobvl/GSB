@@ -56,7 +56,7 @@
                     $uc1 = 'validerFrais';
                     $uc2 = 'suivrePaiementFrais';
                     $act1 = 'selectionner';
-                    $act2 = 'suivrrePaiementFrais';
+                    $act2 = 'selectionner';
                 }
                 ?>
                 <div class="header">
