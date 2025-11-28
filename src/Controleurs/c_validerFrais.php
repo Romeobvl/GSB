@@ -91,6 +91,7 @@ switch ($action) {
                 include PATH_VIEWS . 'v_listeMoisValider.php';
                 include PATH_VIEWS . 'v_validerFrais.php';
                 break;
+            
             case 'Refuser':
                 $idFraisHors = filter_input(INPUT_POST, 'idFraisHors', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $libelleRefuse = filter_input(INPUT_POST, 'lesFraisHorsL', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
