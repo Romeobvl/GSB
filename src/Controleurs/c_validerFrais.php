@@ -101,6 +101,14 @@ switch ($action) {
                 include PATH_VIEWS . 'v_listeMoisValider.php';
                 include PATH_VIEWS . 'v_validerFrais.php';
                 break;
+             case 'Reporter':
+                $pdo->reporterFraisHorsForfait($idFraisHors);
+                
+                $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $leMois);
+                include PATH_VIEWS . 'v_listeVisiteurs.php';
+                include PATH_VIEWS . 'v_listeMoisValider.php';
+                include PATH_VIEWS . 'v_validerFrais.php';
+                break;
         }
         break;
 

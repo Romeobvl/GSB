@@ -33,7 +33,7 @@ switch ($action) {
         include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';
         include PATH_VIEWS . 'v_listeMoisPaiement.php';
         break;
-    
+
     case 'voirEtatFrais':
         $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $leMois);
         $lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $leMois);
@@ -42,9 +42,19 @@ switch ($action) {
         $montantValide = $lesInfosFicheFrais['montantValide'];
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
         $dateModif = Utilitaires::dateAnglaisVersFrancais($lesInfosFicheFrais['dateModif']);
-        
+
         include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';
         include PATH_VIEWS . 'v_listeMoisPaiement.php';
-        include PATH_VIEWS . 'v_etatFrais.php';
+        include PATH_VIEWS . 'v_suivrePaiementFrais.php';
+        break;
+
+    case 'rembourserFiche':
+        $etat = "RB";
+        $pdo->majEtatFicheFrais($idVisiteur, $leMois, $etat);
+
+        include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';
+        include PATH_VIEWS . 'v_listeMoisPaiement.php';
+        include PATH_VIEWS . 'v_suivrePaiementFrais.php';
         break;
 }
+

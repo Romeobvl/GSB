@@ -111,6 +111,7 @@
                             <button class="btn btn-success" type="submit" name="submitType" value="Corriger">Corriger</button>
                             <button class="btn btn-danger" type="reset">Réinitialiser</button>
                             <button class="btn btn-dark" type="submit" name="submitType" value="Refuser">Refuser</button>
+                            <button class="btn btn-warning" type="submit" name="submitType" value="Reporter">Reporter</button>
                         </td>
                     </tr>
 

@@ -315,6 +315,29 @@ class PdoGsb {
         $requetePrepare->bindParam(':unId', $idFraisHors, PDO::PARAM_STR);
         $requetePrepare->execute();
     }
+    
+        public function reporterFraisHorsForfait($idFraisHors): void {
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        $requetePrepare = $this->connexion->prepare(
+                'UPDATE lignefraishorsforfait '
+                . 'SET lignefraishorsforfait.libelle = :unLibelle '
+                . 'WHERE lignefraishorsforfait.id = :unId'
+        );
+        if (stripos($libelle, "REFUSE :") !== 0) {
+            $libelle = "REFUSE : " . $libelle;
+        }
+        $requetePrepare->bindParam(':unLibelle', $libelle, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unId', $idFraisHors, PDO::PARAM_STR);
+        $requetePrepare->execute();
+    }
 
     /**
      * Met à jour le nombre de justificatifs de la table ficheFrais
