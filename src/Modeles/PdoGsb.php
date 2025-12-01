@@ -79,6 +79,13 @@ class PdoGsb {
         return self::$instance;
     }
 
+    /**
+     * Retourne les informations d'un visiteur par son identifiant
+     *
+     * @param String $idVisiteur ID du visiteur
+     *
+     * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
+     */
     public function getInfosVisiteurById($idVisiteur): array {
         $requetePrepare = $this->connexion->prepare(
                 'SELECT visiteur.id AS id, visiteur.nom AS nom, '
@@ -236,6 +243,11 @@ class PdoGsb {
         return $requetePrepare->fetchAll();
     }
 
+    /**
+     * Retourne la liste de tous les visiteurs
+     *
+     * @return un tableau associatif contenant l'id, le nom et le prénom de tous les visiteurs
+     */
     public function getLesVisiteurs(): array {
         $requetePrepare = $this->connexion->prepare(
                 'SELECT visiteur.id AS id, visiteur.nom AS nom, visiteur.prenom AS prenom '
@@ -287,6 +299,16 @@ class PdoGsb {
         }
     }
 
+    /**
+     * Met à jour un frais hors forfait
+     *
+     * @param String $idFraisHors ID du frais hors forfait
+     * @param String $date        Date du frais
+     * @param String $libelle     Libellé du frais
+     * @param Float  $montant     Montant du frais
+     *
+     * @return null
+     */
     public function majFraisHorsForfait($idFraisHors, $date, $libelle, $montant): void {
         $requetePrepare = $this->connexion->prepare(
                 'UPDATE lignefraishorsforfait '
@@ -302,6 +324,14 @@ class PdoGsb {
         $requetePrepare->execute();
     }
 
+    /**
+     * Refuse un frais hors forfait en modifiant son libellé
+     *
+     * @param String $idFraisHors ID du frais hors forfait
+     * @param String $libelle     Libellé du frais à modifier
+     *
+     * @return null
+     */
     public function refuserFraisHorsForfait($idFraisHors, $libelle): void {
         $requetePrepare = $this->connexion->prepare(
                 'UPDATE lignefraishorsforfait '
@@ -315,17 +345,24 @@ class PdoGsb {
         $requetePrepare->bindParam(':unId', $idFraisHors, PDO::PARAM_STR);
         $requetePrepare->execute();
     }
-    
-        public function reporterFraisHorsForfait($idFraisHors): void {
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
+    /**
+     * Reporter un frais hors forfait au mois suivant
+     *
+     * @param String $idFraisHors ID du frais hors forfait
+     *
+     * @return null
+     */
+    public function reporterFraisHorsForfait($idFraisHors): void {
+
+
+
+
+
+
+
+
+
         $requetePrepare = $this->connexion->prepare(
                 'UPDATE lignefraishorsforfait '
                 . 'SET lignefraishorsforfait.libelle = :unLibelle '
@@ -524,6 +561,14 @@ class PdoGsb {
         return $lesMois;
     }
 
+    /**
+     * Retourne les mois disponibles pour la validation d'une fiche de frais
+     *
+     * @param String $idVisiteur ID du visiteur
+     *
+     * @return un tableau associatif de clé un mois -aaaamm- et de valeurs
+     *         l'année et le mois correspondant, uniquement pour les fiches à l'état CL
+     */
     public function getLesMoisDisponiblesAValider($idVisiteur): array {
         $requetePrepare = $this->connexion->prepare(
                 'SELECT fichefrais.mois AS mois FROM fichefrais '
@@ -546,11 +591,16 @@ class PdoGsb {
         }
         return $lesMois;
     }
-    
-    
-    
-    
-        public function getLesMoisDisponiblesAPayer($idVisiteur): array {
+
+    /**
+     * Retourne les mois disponibles pour le paiement d'une fiche de frais
+     *
+     * @param String $idVisiteur ID du visiteur
+     *
+     * @return un tableau associatif de clé un mois -aaaamm- et de valeurs
+     *         l'année et le mois correspondant, uniquement pour les fiches à l'état VA
+     */
+    public function getLesMoisDisponiblesAPayer($idVisiteur): array {
         $requetePrepare = $this->connexion->prepare(
                 'SELECT fichefrais.mois AS mois FROM fichefrais '
                 . 'WHERE fichefrais.idvisiteur = :unIdVisiteur '
