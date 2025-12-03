@@ -22,14 +22,22 @@ $lesVisiteurs = $pdo->getLesVisiteurs();
 $idVisiteur = filter_input(INPUT_POST, 'visiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $leMois = filter_input(INPUT_POST, 'mois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-if (isset($idVisiteur)) {
+if (isset($idVisiteur) && $idVisiteur != null) {
     $visiteurASelectionner = $pdo->getInfosVisiteurById($idVisiteur);
     $moisASelectionner = $leMois;
     $lesMois = $pdo->getLesMoisDisponiblesAPayer($idVisiteur);
+} else {
+    $action ='selectionnerVisiteur';
 }
 
+
 switch ($action) {
-    case 'selectionner':
+
+    case 'selectionnerVisiteur' :
+        include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';
+        break;
+
+    case 'selectionnerMois' :
         include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';
         include PATH_VIEWS . 'v_listeMoisPaiement.php';
         break;

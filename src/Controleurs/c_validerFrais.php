@@ -22,7 +22,7 @@ $lesVisiteurs = $pdo->getLesVisiteurs();
 $idVisiteur = filter_input(INPUT_POST, 'visiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $leMois = filter_input(INPUT_POST, 'mois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-if (isset($idVisiteur)) {
+if (isset($idVisiteur) && $idVisiteur != null) {
     $visiteurASelectionner = $pdo->getInfosVisiteurById($idVisiteur);
     $moisASelectionner = $leMois;
     $lesMois = $pdo->getLesMoisDisponiblesAValider($idVisiteur);
@@ -34,11 +34,17 @@ if (isset($idVisiteur)) {
         $montantValide = $lesInfosFicheFrais['montantValide'];
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
     }
+} else {
+    $action ='selectionnerVisiteur';
 }
 
 
 switch ($action) {
-    case 'selectionner' :
+    case 'selectionnerVisiteur' :
+        include PATH_VIEWS . 'v_listeVisiteurs.php';
+        break;
+    
+    case 'selectionnerMois' :
         include PATH_VIEWS . 'v_listeVisiteurs.php';
         include PATH_VIEWS . 'v_listeMoisValider.php';
         break;
