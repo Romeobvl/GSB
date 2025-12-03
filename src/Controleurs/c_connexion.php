@@ -29,36 +29,30 @@ switch ($action) {
     case 'valideConnexion':
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $mdp = filter_input(INPUT_POST, 'mdp', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        
-        if (strpos($login, '.') !== false) {
-            $visiteur = $pdo->getInfosVisiteur($login, $mdp);
-        } else {
-            $comptable = $pdo->getInfosComptable($login, $mdp);
-        }
-        
-        if (!is_array($visiteur)) {
-            if (!is_array($comptable)) {
-                Utilitaires::ajouterErreur('Login ou mot de passe incorrect');
-                include PATH_VIEWS . 'v_erreurs.php';
-                include PATH_VIEWS . 'v_connexion.php';
-            } else {
-                 $id = $comptable['id'];
-                $nom = $comptable['nom'];
-                $prenom = $comptable['prenom'];
-                $role = "comptable";
-                Utilitaires::connecter($id, $nom, $prenom, $role);
-                header('Location: index.php');
-            }
-        } else {
+        $visiteur = $pdo->getInfosVisiteur($login, $mdp);
+        $comptable = $pdo->getInfosComptable($login, $mdp);
+        if (is_array($visiteur)) {
             $id = $visiteur['id'];
             $nom = $visiteur['nom'];
             $prenom = $visiteur['prenom'];
             $role = "visiteur";
-            Utilitaires::connecter($id, $nom, $prenom, $role);
+            Utilitaires::connecter($id, $nom, $prenom,$role);
             header('Location: index.php');
+        }elseif (is_array($comptable)){
+            $id = $comptable['id'];
+            $nom = $comptable['nom'];
+            $prenom = $comptable['prenom'];
+            $role = "comptable";
+            Utilitaires::connecter($id, $nom, $prenom,$role);
+            header('Location: index.php');
+        } else {
+            Utilitaires::ajouterErreur('Login ou mot de passe incorrect');
+            include PATH_VIEWS . 'v_erreurs.php';
+            include PATH_VIEWS . 'v_connexion.php';
         }
         break;
     default:
         include PATH_VIEWS . 'v_connexion.php';
         break;
 }
+

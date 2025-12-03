@@ -109,17 +109,23 @@ class PdoGsb {
      *
      * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
      */
-    public function getInfosVisiteur($login, $mdp): array {
+       public function getInfosVisiteur($login, $mdp): ?array
+    {
         $requetePrepare = $this->connexion->prepare(
-                'SELECT visiteur.id AS id, visiteur.nom AS nom, '
-                . 'visiteur.prenom AS prenom '
-                . 'FROM visiteur '
-                . 'WHERE visiteur.login = :unLogin AND visiteur.mdp = :unMdp'
+            'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+            . 'visiteur.prenom AS prenom '
+            . 'FROM visiteur '
+            . 'WHERE visiteur.login = :unLogin AND visiteur.mdp = :unMdp'
         );
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
         $requetePrepare->execute();
-        return $requetePrepare->fetch();
+        $resultat = $requetePrepare->fetch();
+         if ($resultat) {
+            return $resultat;
+        } else {
+        return null;
+        }
     }
 
     /**
@@ -130,17 +136,23 @@ class PdoGsb {
      *
      * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
      */
-    public function getInfosComptable($login, $mdp): array {
+    public function getInfosComptable($login, $mdp): ?array
+    {
         $requetePrepare = $this->connexion->prepare(
-                'SELECT c.id AS id, c.nom AS nom, '
-                . 'c.prenom AS prenom '
-                . 'FROM comptable AS c '
-                . 'WHERE c.login = :unLogin AND c.mdp = :unMdp'
+            'SELECT comptable.id AS id, comptable.nom AS nom, '
+            . 'comptable.prenom AS prenom '
+            . 'FROM comptable '
+            . 'WHERE comptable.login = :unLogin AND comptable.mdp = :unMdp'
         );
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
         $requetePrepare->execute();
-        return $requetePrepare->fetch();
+               $resultat = $requetePrepare->fetch();
+        if ($resultat) {
+            return $resultat;
+        } else {
+        return null;
+        }
     }
 
     /**
@@ -318,25 +330,30 @@ class PdoGsb {
     
         public function reporterFraisHorsForfait($idFraisHors): void {
             
-            
-            
-            
-            
-            
-            
-            
-            
         $requetePrepare = $this->connexion->prepare(
-                'UPDATE lignefraishorsforfait '
-                . 'SET lignefraishorsforfait.libelle = :unLibelle '
+                'SELECT mois, idvisiteur, libelle, date, montant '
+                . 'FROM lignefraishorsforfait '
                 . 'WHERE lignefraishorsforfait.id = :unId'
         );
-        if (stripos($libelle, "REFUSE :") !== 0) {
-            $libelle = "REFUSE : " . $libelle;
-        }
-        $requetePrepare->bindParam(':unLibelle', $libelle, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unId', $idFraisHors, PDO::PARAM_STR);
         $requetePrepare->execute();
+        $laLigne = $requetePrepare->fetch();
+        $mois = $laLigne['mois'];
+        $idVisiteur = $laLigne['idvisiteur'];
+        $libelle = $laLigne['libelle'];
+        $date = $laLigne['date'];
+        $montant = $laLigne['montant'];
+            
+        $leMoisSuivant = $this->moisSuivant($mois);
+        $dateEN = Utilitaires::dateAnglaisVersFrancais($date);
+            
+        if ($this->estPremierFraisMois($idVisiteur, $leMoisSuivant)) {
+                
+            $this->creeNouvellesLignesFrais($idVisiteur, $leMoisSuivant);    
+        } 
+
+        $this->creeNouveauFraisHorsForfait($idVisiteur, $leMoisSuivant, $libelle, $dateEN, $montant);    
+        $this->supprimerFraisHorsForfait($idFraisHors);    
     }
 
     /**
@@ -410,6 +427,26 @@ class PdoGsb {
         return $dernierMois;
     }
 
+    
+    public function moisSuivant($mois): string {
+        
+        $anneeActuel = substr($mois, 0, 4);
+        $moisActuel = substr($mois, -2);
+        $moisFinal = "";
+        
+        if($moisActuel == '12') {
+            $moisFinal = (intval($anneeActuel) + 1). '01';
+        } else {
+            if(strlen(strval(intval($moisActuel) + 1)) < 2) {
+               $moisFinal = $anneeActuel.'0'.(intval($moisActuel) + 1);
+            } else {
+                $moisFinal = $anneeActuel.(intval($moisActuel) + 1);
+            }
+        }
+        return $moisFinal;
+    }
+    
+    
     /**
      * Crée une nouvelle fiche de frais et les lignes de frais au forfait
      * pour un visiteur et un mois donnés

@@ -103,6 +103,7 @@ switch ($action) {
                 include PATH_VIEWS . 'v_validerFrais.php';
                 break;
              case 'Reporter':
+                $idFraisHors = filter_input(INPUT_POST, 'idFraisHors', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $pdo->reporterFraisHorsForfait($idFraisHors);
                 
                 $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $leMois);
