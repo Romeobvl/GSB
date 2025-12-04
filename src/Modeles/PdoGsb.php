@@ -695,4 +695,30 @@ class PdoGsb {
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
     }
+    
+    
+        public function getListeVehicule(): array {
+        $requetePrepare = $this->connexion->prepare(
+                'SELECT * FROM vehicule'
+        );
+        $requetePrepare->execute();
+        $lesVehicules = array();
+        while ($laLigne = $requetePrepare->fetch()) {
+            $id = $laLigne['id'];
+            $puissance = $laLigne['puissance'];
+            $carburant = $laLigne['carburant'];
+            $prixKilometre = $laLigne['prixKilometre'];
+            
+            $lesVehicules[] = array(
+                'id' => $id,
+                'puissance' => $puissance,
+                'carburant' => $carburant,
+                'prixKilometre' => $prixKilometre
+            );
+        }
+        return $lesVehicules;
+    }
+
+    
+    
 }

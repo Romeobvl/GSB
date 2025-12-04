@@ -41,8 +41,33 @@
                                class="form-control">
                     </div>
                     <?php
-                }
+                }                                   
                 ?>
+                
+                                <select id="vehicule" name="vehicule" class="form-select">
+                        <option selected value="">
+                                    -Selectionner-
+                                </option>
+                    <?php
+                        foreach ($lesVehicules as $unVehicule) {
+                            if ($unVehicule == $vehiculeASelectionner) {
+                                ?>
+                                <option selected value="<?php echo $unVehicule['id'] ?>">
+                                    <?php echo $unVehicule['puissance'] . ' CV ' . $unVehicule['carburant'] ?>
+                                </option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value="<?php echo $unVehicule['id'] ?>">
+                                    <?php echo $unVehicule['puissance'] . ' CV ' . $unVehicule['carburant'] ?>
+                                </option>
+                                <?php
+                            }
+                        }
+                    
+                    ?>
+                </select>
+                
                 <button class="btn btn-success" type="submit">Ajouter</button>
                 <button class="btn btn-danger" type="reset">Effacer</button>
             </fieldset>
