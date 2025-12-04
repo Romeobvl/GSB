@@ -109,24 +109,41 @@ class PdoGsb {
      *
      * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
      */
-       public function getInfosVisiteur($login, $mdp): ?array
-    {
+   /* public function getInfosVisiteur($login, $mdp): ?array {
         $requetePrepare = $this->connexion->prepare(
-            'SELECT visiteur.id AS id, visiteur.nom AS nom, '
-            . 'visiteur.prenom AS prenom '
-            . 'FROM visiteur '
-            . 'WHERE visiteur.login = :unLogin AND visiteur.mdp = :unMdp'
+                'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+                . 'visiteur.prenom AS prenom '
+                . 'FROM visiteur '
+                . 'WHERE visiteur.login = :unLogin AND visiteur.mdp = :unMdp'
         );
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
         $requetePrepare->execute();
         $resultat = $requetePrepare->fetch();
-         if ($resultat) {
+        if ($resultat) {
             return $resultat;
         } else {
-        return null;
+            return null;
+        }
+    } */
+
+    public function getInfosVisiteur($login): ?array {
+        $requetePrepare = $this->connexion->prepare(
+                'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+                . 'visiteur.prenom AS prenom '
+                . 'FROM visiteur '
+                . 'WHERE visiteur.login = :unLogin'
+        );
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        $resultat = $requetePrepare->fetch();
+        if ($resultat) {
+            return $resultat;
+        } else {
+            return null;
         }
     }
+
 
     /**
      * Retourne les informations d'un comptable
@@ -135,26 +152,48 @@ class PdoGsb {
      * @param String $mdp   Mot de passe du comptable
      *
      * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
-     */
-    public function getInfosComptable($login, $mdp): ?array
-    {
+     */   
+    public function getInfosComptable($login): ?array {
         $requetePrepare = $this->connexion->prepare(
-            'SELECT comptable.id AS id, comptable.nom AS nom, '
-            . 'comptable.prenom AS prenom '
-            . 'FROM comptable '
-            . 'WHERE comptable.login = :unLogin AND comptable.mdp = :unMdp'
+                'SELECT comptable.id AS id, comptable.nom AS nom, '
+                . 'comptable.prenom AS prenom '
+                . 'FROM comptable '
+                . 'WHERE comptable.login = :unLogin'
         );
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
-        $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
         $requetePrepare->execute();
-               $resultat = $requetePrepare->fetch();
+        $resultat = $requetePrepare->fetch();
         if ($resultat) {
             return $resultat;
         } else {
-        return null;
+            return null;
         }
     }
 
+
+    public function getMdpVisiteur($login) {
+        $requetePrepare = $this->connexion->prepare(
+                'SELECT mdp '
+                . 'FROM visiteur '
+                . 'WHERE visiteur.login = :unLogin'
+        );
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch(PDO::FETCH_OBJ)->mdp;
+    }
+    
+ 
+    
+    public function getMdpComptable($login) {
+        $requetePrepare = $this->connexion->prepare(
+                'SELECT mdp '
+                . 'FROM comptable '
+                . 'WHERE comptable.login = :unLogin'
+        );
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch(PDO::FETCH_OBJ)->mdp;
+    }
     /**
      * Retourne sous forme d'un tableau associatif toutes les lignes de frais
      * hors forfait concernées par les deux arguments.
@@ -327,9 +366,9 @@ class PdoGsb {
         $requetePrepare->bindParam(':unId', $idFraisHors, PDO::PARAM_STR);
         $requetePrepare->execute();
     }
-    
-        public function reporterFraisHorsForfait($idFraisHors): void {
-            
+
+    public function reporterFraisHorsForfait($idFraisHors): void {
+
         $requetePrepare = $this->connexion->prepare(
                 'SELECT mois, idvisiteur, libelle, date, montant '
                 . 'FROM lignefraishorsforfait '
@@ -343,17 +382,17 @@ class PdoGsb {
         $libelle = $laLigne['libelle'];
         $date = $laLigne['date'];
         $montant = $laLigne['montant'];
-            
+
         $leMoisSuivant = $this->moisSuivant($mois);
         $dateEN = Utilitaires::dateAnglaisVersFrancais($date);
-            
-        if ($this->estPremierFraisMois($idVisiteur, $leMoisSuivant)) {
-                
-            $this->creeNouvellesLignesFrais($idVisiteur, $leMoisSuivant);    
-        } 
 
-        $this->creeNouveauFraisHorsForfait($idVisiteur, $leMoisSuivant, $libelle, $dateEN, $montant);    
-        $this->supprimerFraisHorsForfait($idFraisHors);    
+        if ($this->estPremierFraisMois($idVisiteur, $leMoisSuivant)) {
+
+            $this->creeNouvellesLignesFrais($idVisiteur, $leMoisSuivant);
+        }
+
+        $this->creeNouveauFraisHorsForfait($idVisiteur, $leMoisSuivant, $libelle, $dateEN, $montant);
+        $this->supprimerFraisHorsForfait($idFraisHors);
     }
 
     /**
@@ -427,26 +466,24 @@ class PdoGsb {
         return $dernierMois;
     }
 
-    
     public function moisSuivant($mois): string {
-        
+
         $anneeActuel = substr($mois, 0, 4);
         $moisActuel = substr($mois, -2);
         $moisFinal = "";
-        
-        if($moisActuel == '12') {
-            $moisFinal = (intval($anneeActuel) + 1). '01';
+
+        if ($moisActuel == '12') {
+            $moisFinal = (intval($anneeActuel) + 1) . '01';
         } else {
-            if(strlen(strval(intval($moisActuel) + 1)) < 2) {
-               $moisFinal = $anneeActuel.'0'.(intval($moisActuel) + 1);
+            if (strlen(strval(intval($moisActuel) + 1)) < 2) {
+                $moisFinal = $anneeActuel . '0' . (intval($moisActuel) + 1);
             } else {
-                $moisFinal = $anneeActuel.(intval($moisActuel) + 1);
+                $moisFinal = $anneeActuel . (intval($moisActuel) + 1);
             }
         }
         return $moisFinal;
     }
-    
-    
+
     /**
      * Crée une nouvelle fiche de frais et les lignes de frais au forfait
      * pour un visiteur et un mois donnés
@@ -583,11 +620,8 @@ class PdoGsb {
         }
         return $lesMois;
     }
-    
-    
-    
-    
-        public function getLesMoisDisponiblesAPayer($idVisiteur): array {
+
+    public function getLesMoisDisponiblesAPayer($idVisiteur): array {
         $requetePrepare = $this->connexion->prepare(
                 'SELECT fichefrais.mois AS mois FROM fichefrais '
                 . 'WHERE fichefrais.idvisiteur = :unIdVisiteur '
