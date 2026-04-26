@@ -697,26 +697,100 @@ class PdoGsb {
     }
     
     
-        public function getListeVehicule(): array {
+    public function getListeVehicule(): array {
         $requetePrepare = $this->connexion->prepare(
-                'SELECT * FROM vehicule'
+                'SELECT * FROM puissancevehicule'
         );
         $requetePrepare->execute();
         $lesVehicules = array();
         while ($laLigne = $requetePrepare->fetch()) {
             $id = $laLigne['id'];
             $puissance = $laLigne['puissance'];
-            $carburant = $laLigne['carburant'];
-            $prixKilometre = $laLigne['prixKilometre'];
+            $prixKilometrique = $laLigne['prixKilometrique'];
             
             $lesVehicules[] = array(
                 'id' => $id,
                 'puissance' => $puissance,
-                'carburant' => $carburant,
-                'prixKilometre' => $prixKilometre
+                'prixKilometrique' => $prixKilometrique
             );
         }
         return $lesVehicules;
+    }
+
+    public function getVehiculeByVisiteur($idVisiteur) {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT p.id, p.puissance, p.prixKilometrique 
+            FROM puissancevehicule p 
+            JOIN visiteur v ON p.id = v.idvehicule 
+            WHERE v.id = :idVisiteur'
+        );
+        $requetePrepare->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+
+    public function majVehiculeVisiteur($idVisiteur, $idVehicule): void {
+        $requetePrepare = $this->connexion->prepare(
+            'UPDATE visiteur SET idvehicule = :idVehicule WHERE id = :idVisiteur'
+        );
+        $requetePrepare->bindParam(':idVehicule', $idVehicule, PDO::PARAM_INT);
+        $requetePrepare->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->execute();
+    }
+
+    public function MajMontantValide($idVisiteur, $mois): void {
+        // 1. Calcul des frais forfaitisés CLASSIQUES (tout sauf les KM)
+        $reqForfait = $this->connexion->prepare(
+            "SELECT SUM(l.quantite * f.montant) as totalForfait 
+             FROM lignefraisforfait l 
+             JOIN fraisforfait f ON l.idfraisforfait = f.id 
+             WHERE l.idvisiteur = :idVisiteur AND l.mois = :mois AND l.idfraisforfait != 'KM'"
+        );
+        $reqForfait->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $reqForfait->bindParam(':mois', $mois, PDO::PARAM_STR);
+        $reqForfait->execute();
+        $resForfait = $reqForfait->fetch();
+        $totalForfait = $resForfait['totalForfait'] ? $resForfait['totalForfait'] : 0;
+
+        // 2. Calcul des frais KILOMÉTRIQUES (basés sur la puissance du véhicule du visiteur)
+        $reqKM = $this->connexion->prepare(
+            "SELECT SUM(l.quantite * p.prixKilometrique) as totalKM 
+             FROM lignefraisforfait l 
+             JOIN visiteur v ON l.idvisiteur = v.id 
+             JOIN puissancevehicule p ON v.idvehicule = p.id 
+             WHERE l.idvisiteur = :idVisiteur AND l.mois = :mois AND l.idfraisforfait = 'KM'"
+        );
+        $reqKM->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $reqKM->bindParam(':mois', $mois, PDO::PARAM_STR);
+        $reqKM->execute();
+        $resKM = $reqKM->fetch();
+        $totalKM = $resKM['totalKM'] ? $resKM['totalKM'] : 0;
+
+        // 3. Calcul des frais HORS FORFAIT (en excluant ceux qui ont été refusés)
+        $reqHorsForfait = $this->connexion->prepare(
+            "SELECT SUM(montant) as totalHorsForfait 
+             FROM lignefraishorsforfait 
+             WHERE idvisiteur = :idVisiteur AND mois = :mois AND libelle NOT LIKE 'REFUSE %'"
+        );
+        $reqHorsForfait->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $reqHorsForfait->bindParam(':mois', $mois, PDO::PARAM_STR);
+        $reqHorsForfait->execute();
+        $resHorsForfait = $reqHorsForfait->fetch();
+        $totalHorsForfait = $resHorsForfait['totalHorsForfait'] ? $resHorsForfait['totalHorsForfait'] : 0;
+
+        // 4. Addition globale
+        $montantGlobal = $totalForfait + $totalKM + $totalHorsForfait;
+
+        // 5. Mise à jour de la table fichefrais
+        $reqMaj = $this->connexion->prepare(
+            "UPDATE fichefrais 
+             SET montantvalide = :montantGlobal 
+             WHERE idvisiteur = :idVisiteur AND mois = :mois"
+        );
+        $reqMaj->bindParam(':montantGlobal', $montantGlobal, PDO::PARAM_STR);
+        $reqMaj->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $reqMaj->bindParam(':mois', $mois, PDO::PARAM_STR);
+        $reqMaj->execute();
     }
 
     

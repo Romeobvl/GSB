@@ -56,6 +56,24 @@
                 </tr>
             </table>
 
+                <select id="vehicule" name="vehicule" class="form-select">
+                        <option selected value="<?php echo $vehiculeVisiteur['id'] ?>">
+                                    <?php echo $vehiculeVisiteur['puissance'] ?>
+                                </option>
+                    <?php
+                        foreach ($lesVehicules as $unVehicule) {
+                            if ($unVehicule['id'] != $vehiculeVisiteur['id']) {
+                                ?>
+                                <option value="<?php echo $unVehicule['id'] ?>">
+                                    <?php echo $unVehicule['puissance'] ?>
+                                </option>
+                                <?php
+                            }
+                        }
+                    
+                    ?>
+                </select>
+
             <button class="btn btn-success" type="submit">Corriger</button>
             <button class="btn btn-danger" type="reset">Réinitialiser</button>
         </form>

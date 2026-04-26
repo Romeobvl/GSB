@@ -17,6 +17,7 @@
 <hr>
 <div>
     <h2>État de la fiche de frais : <strong><?php echo $libEtat ?></strong></h2>
+    <h3>Montant validé : <strong><?php echo $montantValide ?> €</strong></h3>
 </div>
 <h3>Éléments forfaitisés</h3>
 <div>
@@ -77,7 +78,7 @@
     </div>
 </div>
 <div>
-    <form method="post" action="index.php?uc=suivrePaiement&action=rembourserFiche" onsubmit="return confirm('Voulez-vous valider le remboursement de cette fiche de frais ?');">
+    <form method="post" action="index.php?uc=suivrePaiementFrais&action=rembourserFiche" onsubmit="return confirm('Voulez-vous valider le remboursement de cette fiche de frais ?');">
 
         <input type="hidden" name="visiteur" value="<?php echo $idVisiteur ?>">
         <input type="hidden" name="mois" value="<?php echo $leMois ?>">

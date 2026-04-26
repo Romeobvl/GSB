@@ -60,6 +60,15 @@ switch ($action) {
         $etat = "RB";
         $pdo->majEtatFicheFrais($idVisiteur, $leMois, $etat);
 
+        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $leMois);
+        $lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $leMois);
+        $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($idVisiteur, $leMois);
+        
+        $libEtat = $lesInfosFicheFrais['libEtat'];
+        $montantValide = $lesInfosFicheFrais['montantValide'];
+        $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
+        $dateModif = Utilitaires::dateAnglaisVersFrancais($lesInfosFicheFrais['dateModif']);
+
         include PATH_VIEWS . 'v_listeVisiteursSuivrePaiement.php';
         include PATH_VIEWS . 'v_listeMoisPaiement.php';
         include PATH_VIEWS . 'v_suivrePaiementFrais.php';
