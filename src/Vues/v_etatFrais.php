@@ -76,5 +76,9 @@
             }
             ?>
         </table>
+        <form role="form" method="post" action="/index.php?uc=etatFrais&action=genererPDF">
+            <input type="hidden" value="<?php echo $leMois ?>" id="lstMois" name="lstMois" />
+            <input type="submit" role="button" value="Générer le PDF" class="btn btn-primary"/>
+        </form>
     </div>
 </div>
