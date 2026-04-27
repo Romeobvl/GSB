@@ -251,4 +251,33 @@ abstract class Utilitaires
             return count($_REQUEST['erreurs']);
         }
     }
+
+    /**
+     * Retourne une date au format textuel complet
+     * ex : "202503" => "Mars 2025"
+     *
+     * @param String $date Date au format AAAAMM
+     *
+     * @return String Date textuelle ex : "Mars 2025"
+     */
+    public static function getDateTextuelle($date): string
+    {
+        $annee = substr($date, 0, 4);
+        $mois  = substr($date, 4, 2);
+        $nomsMois = [
+            '01' => 'Janvier',
+            '02' => 'Février',
+            '03' => 'Mars',
+            '04' => 'Avril',
+            '05' => 'Mai',
+            '06' => 'Juin',
+            '07' => 'Juillet',
+            '08' => 'Août',
+            '09' => 'Septembre',
+            '10' => 'Octobre',
+            '11' => 'Novembre',
+            '12' => 'Décembre'
+        ];
+        return $nomsMois[$mois] . ' ' . $annee;
+    }
 }

@@ -738,6 +738,13 @@ class PdoGsb {
         $requetePrepare->execute();
     }
 
+    public function getLesPrixForfait(): array {
+    $requetePrepare = $this->connexion->prepare(
+        'SELECT id, libelle, montant FROM fraisforfait'
+    );
+    $requetePrepare->execute();
+    return $requetePrepare->fetchAll();
+}
     public function MajMontantValide($idVisiteur, $mois): void {
         // 1. Calcul des frais forfaitisés CLASSIQUES (tout sauf les KM)
         $reqForfait = $this->connexion->prepare(
