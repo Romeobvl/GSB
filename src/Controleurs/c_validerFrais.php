@@ -26,7 +26,6 @@ $lesVehicules = $pdo->getListeVehicule();
 
 if (isset($idVisiteur) && $idVisiteur != null) {
     $visiteurASelectionner = $pdo->getInfosVisiteurById($idVisiteur);
-    $vehiculeVisiteur = $pdo->getVehiculeByVisiteur($idVisiteur);
     $moisASelectionner = $leMois;
     $lesMois = $pdo->getLesMoisDisponiblesAValider($idVisiteur);
     if (isset($leMois)) {
@@ -36,6 +35,7 @@ if (isset($idVisiteur) && $idVisiteur != null) {
         $libEtat = $lesInfosFicheFrais['libEtat'];
         $montantValide = $lesInfosFicheFrais['montantValide'];
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
+        $vehiculeVisiteur = $pdo->getVehiculeByVisiteur($idVisiteur);
     }
 } else {
     $action ='selectionnerVisiteur';
@@ -72,9 +72,10 @@ switch ($action) {
         $pdo->majVehiculeVisiteur($idVisiteur, $leVehicule);
         $pdo->majFraisForfait($idVisiteur, $leMois, $lesFrais);
 
+        $vehiculeVisiteur = $pdo->getVehiculeByVisiteur($idVisiteur);
         $lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $leMois);
-
         $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($idVisiteur, $leMois);
+
         $libEtat = $lesInfosFicheFrais['libEtat'];
         $montantValide = $lesInfosFicheFrais['montantValide'];
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
