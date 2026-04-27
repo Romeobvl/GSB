@@ -16,6 +16,7 @@
  */
 
 use Outils\Utilitaires;
+use Outils\fpdf;
 
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_SESSION['id'];
