@@ -76,9 +76,10 @@ suiviInstallation "Mise à jour de la liste des paquets et mise à jour de l'ins
 ${SUDO} apt-get -y update &>>$FICHIER_DE_LOG && toutEstOK || erreurOnSort 
 ${SUDO} apt-get -y upgrade &>>$FICHIER_DE_LOG && toutEstOK || erreurOnSort
 
-# Installation des services Apache, MariaDB, PHP, Git, OpenSSH-Server et Fail2Ban
+# Installation des services Apache, MariaDB, PHP, Git, OpenSSH-Server et Fail2Ban & mbstring(Pour les pdf)
 suiviInstallation "Installation des services Apache, MariaDB, PHP, Git, OpenSSH-Server et Fail2Ban"
 ${SUDO} apt-get -y install mariadb-server apache2 php libapache2-mod-php php-mysql git openssh-server fail2ban &>>$FICHIER_DE_LOG && toutEstOK || erreurOnSort
+${SUDO} apt-get install php-mbstring
 
 # Création d'un compte admin pour l'administration de MariaDB
 suiviInstallation "Création d'un compte admin pour l'administration de MariaDB"
@@ -89,7 +90,7 @@ ${SUDO} mariadb -u root -e "CREATE USER admin@'%'; GRANT ALL PRIVILEGES ON *.* t
 suiviInstallation "Restauration du contexte GSB"
 cd /var/www/html
 # Récupération du dépôt GitHub (attention si le dépôt est privé à bien ajouter le token d'authentification)
-${SUDO} git clone https://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@github.com/jgil83000/GSB.git &>>$FICHIER_DE_LOG && toutEstOK || erreurOnSort
+${SUDO} git clone https://github.com/Romeobvl/GSB.git &>>$FICHIER_DE_LOG && toutEstOK || erreurOnSort
 
 # Import de la BDD
 ${SUDO} mariadb -u admin -p${MOT_DE_PASSE_ADMIN_MARIADB} < /var/www/html/GSB/resources/bdd/gsb_restore.sql &>>$FICHIER_DE_LOG && toutEstOK || erreurOnSort
