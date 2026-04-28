@@ -121,7 +121,7 @@ switch ($action) {
 
     // Récupérer le prix KM selon le véhicule du visiteur
     $vehicule = $pdo->getVehiculeByVisiteur($id);
-    $prixKm = $vehicule ? $vehicule['prixKilometrique'] : 0.52;
+    $prixKm = $vehicule['prixKilometrique'];
 
     // En-tête tableau forfait
     $w = [60, 40, 40, 40];
